@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+sqlalchemy
+websockets
+requests
+python-dotenv
+google-genai
+undetected-chromedriver
+selenium
