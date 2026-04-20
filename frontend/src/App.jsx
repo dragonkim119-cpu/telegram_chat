@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Bell, Search, Trash2, Wifi, WifiOff, ExternalLink, Newspaper, Hash, TrendingUp, Activity, Wallet, Plus, TrendingDown, Lightbulb } from 'lucide-react';
 
-const API_BASE = "/api";
+// 배포 환경과 로컬 환경 주소 대응
+const API_BASE = import.meta.env.VITE_BACKEND_URL ? `${import.meta.env.VITE_BACKEND_URL}/api` : "/api";
 const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-const WS_URL = `${protocol}//${window.location.host}/ws`;
+const WS_URL = import.meta.env.VITE_BACKEND_URL 
+  ? `${import.meta.env.VITE_BACKEND_URL.replace('http', 'ws')}/ws`
+  : `${protocol}//${window.location.host}/ws`;
 
 function App() {
   const [news, setNews] = useState([]);
