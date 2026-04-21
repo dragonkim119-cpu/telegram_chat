@@ -298,35 +298,35 @@ function App() {
           {/* 백테스팅 리포트 */}
           {(isAnalyzing || backtestData) && (
             <section className="bg-blue-600 text-white p-6 rounded-3xl shadow-xl animate-in slide-in-from-left-4">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-black uppercase text-sm tracking-widest">Backtest: {backtestData?.word}</h3>
-                {isAnalyzing && <Activity size={16} className="animate-spin"/>}
-              </div>
-              {backtestData && (
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white/10 p-3 rounded-2xl">
-                    <div className="text-[9px] font-bold opacity-60 uppercase">Win Rate</div>
-                    <div className="text-xl font-black">{backtestData.win_rate}%</div>
-                  </div>
-                  <div className="bg-white/10 p-3 rounded-2xl">
-                    <div className="text-[9px] font-bold opacity-60 uppercase">Avg Profit</div>
-                    <div className="text-xl font-black">{backtestData.avg_profit}%</div>
-                  </div>
-                </div>
-              )}
+              {/* ... 기존 백테스트 UI ... */}
             </section>
           )}
 
-          <button onClick={async () => fetch(`${API_BASE}/test-telegram`, {method:'POST'})} className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-black py-4 rounded-3xl shadow-lg flex items-center justify-center gap-2 transition-transform active:scale-95 uppercase text-xs tracking-widest">
-            <Bell size={16} className="fill-current" /> Test Alert
-          </button>
+          <div className="space-y-2">
+            <button 
+              onClick={async () => {
+                const res = await fetch(`${API_BASE}/seed`, { method: 'POST' });
+                if (res.ok) {
+                  alert("서버에 테스트 데이터 10개가 생성되었습니다. 새로고침해 주세요.");
+                  window.location.reload();
+                }
+              }}
+              className="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2 rounded-xl text-[10px] uppercase tracking-widest transition-all"
+            >
+              🔄 Seed Server Data (Init)
+            </button>
+
+            <button onClick={async () => fetch(`${API_BASE}/test-telegram`, {method:'POST'})} className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-black py-4 rounded-3xl shadow-lg flex items-center justify-center gap-2 transition-transform active:scale-95 uppercase text-xs tracking-widest">
+              <Bell size={16} className="fill-current" /> Test Alert
+            </button>
+          </div>
         </div>
 
         {/* 메인 뉴스 피드 (8컬럼) */}
         <div className="lg:col-span-8 space-y-6">
           
-          {/* TradingView 차트 섹션 */}
-          <section className="bg-white p-2 rounded-[2rem] border-2 border-slate-100 shadow-xl overflow-hidden h-[500px] relative">
+          {/* TradingView 차트 섹션 (높이 모바일 최적화) */}
+          <section className="bg-white p-2 rounded-[2rem] border-2 border-slate-100 shadow-xl overflow-hidden min-h-[400px] h-[60vh] relative">
             <div id="tradingview_widget" className="w-full h-full" />
             <div className="absolute top-4 left-4 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full border border-slate-200 text-[10px] font-black z-10">
               REAL-TIME CHART (UPBIT:BTCKRW)
