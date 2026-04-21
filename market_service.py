@@ -56,7 +56,7 @@ class MarketService:
             change_rate = ((current_price - oldest_price) / oldest_price) * 100
             
             # 3% 이상 변동 시 알림
-            if abs(change_rate) >= 0.5 and (now - self.last_alert_time[market]).total_seconds() > 300:
+            if abs(change_rate) >= 3.0 and (now - self.last_alert_time[market]).total_seconds() > 300:
                 direction = "🚀 급등" if change_rate > 0 else "📉 급락"
                 msg = f"⚠️ [시세 주의보] {market.split('-')[1]} {direction} 중! ({change_rate:+.2f}% / 5분 대비)"
                 
@@ -97,7 +97,7 @@ class MarketService:
             return
 
         msg = None
-        if kp_avg >= 1.0:
+        if kp_avg >= 0.3:
             msg = f"🔥 [김프 과열 주의] 현재 평균 김치 프리미엄이 {kp_avg:.2f}%로 매우 높습니다. 시장 과열에 주의하세요!"
         elif kp_avg <= 0.0:
             msg = f"❄️ [역프 발생 알림] 현재 평균 김치 프리미엄이 {kp_avg:.2f}%(역프)입니다. 해외 대비 국내 시세가 저렴합니다."
