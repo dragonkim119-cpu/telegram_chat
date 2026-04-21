@@ -44,10 +44,12 @@ class CoinnessCrawler:
         options.add_argument("--window-size=1920,1080")
         options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
         
-        # .env 파일에서 HEADLESS=true 설정 시 창 없이 실행
+        # .env 파일에서 HEADLESS=true 설정 시에만 창 없이 실행
         if os.getenv("HEADLESS", "false").lower() == "true":
             options.add_argument("--headless=new")
             logger.info("🕵️ Crawler: Headless 모드로 실행됩니다.")
+        else:
+            logger.info("🖥️ Crawler: 일반 모드(창 있음)로 실행됩니다.")
             
         return options
 

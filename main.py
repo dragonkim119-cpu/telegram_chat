@@ -188,29 +188,18 @@ def delete_keyword(keyword_id: int, db: Session = Depends(get_db)):
 
 @app.post("/api/test-telegram")
 def test_telegram():
-    # ... (기존 코드 동일)
-
-@app.post("/api/seed")
-def seed_data(db: Session = Depends(get_db)):
-    """서버에 테스트용 가짜 데이터 10개 생성"""
-    import random
-    from datetime import datetime, timedelta
-    titles = ["비트코인 ETF 승인", "리플 승소 가능성", "이더리움 업그레이드", "바이낸스 신규 상장", "급등 주의보"]
-    for i in range(10):
-        t = random.choice(titles) + f" {random.randint(1,100)}"
-        new_news = models.News(
-            title=t, ai_summary="서버 테스트 데이터입니다.", 
-            ai_sentiment="호재", created_at=datetime.now() - timedelta(hours=i)
-        )
-        db.add(new_news)
-    db.commit()
-    return {"message": "10개의 데이터가 생성되었습니다."}
+    """텔레그램 연결 테스트"""
+    success = CoinnessCrawler.send_telegram_static("🚀 *Coinness Dashboard*\n\n텔레그램 연결 테스트에 성공했습니다!")
+    if success:
+        return {"status": "success", "message": "테스트 메시지가 전송되었습니다."}
+    else:
+        raise HTTPException(status_code=500, detail="메시지 전송에 실패했습니다. 설정을 확인하세요.")
 
 @app.get("/api/backtest/{keyword}")
 def get_backtest(keyword: str, db: Session = Depends(get_db)):
     """특정 키워드가 포함된 과거 뉴스의 수익률 분석 결과 반환"""
     search_keyword = keyword
-    # 간단한 약어 맵핑 (확장 가능)
+    # 간단한 약어 맵핑
     mapping = {"BTC": "비트코인", "ETH": "이더리움", "XRP": "리플"}
     if keyword.upper() in mapping:
         search_term = f"%{mapping[keyword.upper()]}%"
@@ -230,7 +219,6 @@ def get_backtest(keyword: str, db: Session = Depends(get_db)):
     analysis = BacktestService.analyze_keyword_impact(news_list, market="KRW-BTC")
     
     if not analysis:
-        # 시세 조회 API 실패 등의 경우
         raise HTTPException(status_code=400, detail="시세 데이터를 불러올 수 없습니다. 잠시 후 다시 시도하세요.")
         
     return analysis
