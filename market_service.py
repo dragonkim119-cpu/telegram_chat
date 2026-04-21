@@ -56,7 +56,7 @@ class MarketService:
             change_rate = ((current_price - oldest_price) / oldest_price) * 100
             
             # 3% 이상 변동 시 알림
-            if abs(change_rate) >= 3.0 and (now - self.last_alert_time[market]).total_seconds() > 300:
+            if abs(change_rate) >= 0.5 and (now - self.last_alert_time[market]).total_seconds() > 300:
                 direction = "🚀 급등" if change_rate > 0 else "📉 급락"
                 msg = f"⚠️ [시세 주의보] {market.split('-')[1]} {direction} 중! ({change_rate:+.2f}% / 5분 대비)"
                 
